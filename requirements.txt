@@ -7,6 +7,7 @@ python-dotenv
 SQLAlchemy
 streamlit
 torch
+sentence-transformers
 llama-index
 llama-index-agent-openai
 llama-index-cli
