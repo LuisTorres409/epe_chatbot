@@ -6,7 +6,6 @@ from io import BytesIO
 import torch
 
 import streamlit as st
-from dotenv import load_dotenv
 import boto3
 
 from PyPDF2 import PdfReader
@@ -36,8 +35,6 @@ from templates.file_uploader_label import hide_label
 ## Fazendo o embeddings dos livros
 @st.cache_resource(show_spinner=False)
 def init_connections_and_databases():
-    
-
     
 
     
@@ -138,7 +135,6 @@ def process_documents(pdf_docs):
 
 st.set_page_config(page_title="EPE Chatbot", layout="centered", initial_sidebar_state="expanded", menu_items=None)
 st.title('EPE Chatbot')
-#load_dotenv()
 
 index , s3 , bucket_name , chat_engine , query_engine= init_connections_and_databases()
 st.sidebar.image('assets/epe_logo.png',width=120)
