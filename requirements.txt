@@ -3,8 +3,10 @@ langchain
 langchain_community
 pinecone-client
 PyPDF2
+dotenv
 python-dotenv
 SQLAlchemy
+streamlit-pdf-viewer
 streamlit
 torch
 sentence-transformers
