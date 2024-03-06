@@ -95,7 +95,8 @@ def download_from_s3(file_name):
 
 def preview_pdf(file_bytes):
     encoded_pdf = base64.b64encode(file_bytes).decode('utf-8')
-    return f'<embed src="data:application/pdf;base64,{encoded_pdf}" width="100%" height="500" type="application/pdf">'
+    #return f'<embed src="data:application/pdf;base64,{encoded_pdf}" width="100%" height="500" type="application/pdf">'
+    return F'<iframe src="data:application/pdf;base64,{encoded_pdf}" width="100%" height="500" type="application/pdf"></iframe>'
 
 def process_documents(pdf_docs):
     pdfs = []
@@ -204,7 +205,6 @@ if st.session_state.messages[-1]["role"] != "assistant":
                     nome_arquivo = os.path.basename(caminho_arquivo)
                     file_bytes = download_from_s3(nome_arquivo)
                     doc_preview = preview_pdf(file_bytes)
-                    st.write(response)
                     response_message = (response.response + f'\n\n Aqui está o documento relacionado a sua pergunta: ')
                     st.write(response_message,unsafe_allow_html=True)
                     st.write(doc_preview, unsafe_allow_html=True)
