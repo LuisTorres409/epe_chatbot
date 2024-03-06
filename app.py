@@ -7,7 +7,6 @@ import torch
 
 import streamlit as st
 from dotenv import load_dotenv
-from sqlalchemy import make_url
 import boto3
 
 from PyPDF2 import PdfReader
@@ -38,6 +37,7 @@ from templates.file_uploader_label import hide_label
 @st.cache_resource(show_spinner=False)
 def init_connections_and_databases():
     
+
     
     llm = OpenAI(model="gpt-3.5-turbo", temperature=0.5, system_prompt="You are an assistant to the company EPE, it's a brazilian public company that works with energy. You are responsible for the company's chatbot and you will be talking to company members and assisting with knowlodge of EPE database.Answer all questios in portuguese", max_tokens=2000)
     #llm = ChatOpenAI()
