@@ -39,6 +39,8 @@ def init_connections_and_databases():
     
 
     
+
+    
     llm = OpenAI(model="gpt-3.5-turbo", temperature=0.5, system_prompt="You are an assistant to the company EPE, it's a brazilian public company that works with energy. You are responsible for the company's chatbot and you will be talking to company members and assisting with knowlodge of EPE database.Answer all questios in portuguese", max_tokens=2000)
     #llm = ChatOpenAI()
 
@@ -202,6 +204,7 @@ if st.session_state.messages[-1]["role"] != "assistant":
                     nome_arquivo = os.path.basename(caminho_arquivo)
                     file_bytes = download_from_s3(nome_arquivo)
                     doc_preview = preview_pdf(file_bytes)
+                    st.write(response)
                     response_message = (response.response + f'\n\n Aqui está o documento relacionado a sua pergunta: ')
                     st.write(response_message,unsafe_allow_html=True)
                     st.write(doc_preview, unsafe_allow_html=True)
