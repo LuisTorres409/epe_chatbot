@@ -129,7 +129,7 @@ def process_documents(pdf_docs):
 
 st.set_page_config(page_title="EPE Chatbot", layout="centered", initial_sidebar_state="expanded", menu_items=None)
 st.title('EPE Chatbot')
-load_dotenv()
+#load_dotenv()
 
 index , s3 , bucket_name , chat_engine , query_engine= init_connections_and_databases()
 st.sidebar.image('assets/epe_logo.png',width=120)
