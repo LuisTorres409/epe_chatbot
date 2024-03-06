@@ -6,7 +6,6 @@ PyPDF2
 dotenv
 python-dotenv
 SQLAlchemy
-streamlit-pdf-viewer
 streamlit
 torch
 sentence-transformers

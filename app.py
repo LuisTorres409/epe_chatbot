@@ -8,7 +8,6 @@ import torch
 import streamlit as st
 from dotenv import load_dotenv
 import boto3
-from streamlit_pdf_viewer import pdf_viewer
 
 from PyPDF2 import PdfReader
 from llama_index.core import Document, Settings, SimpleDirectoryReader, StorageContext, ServiceContext, VectorStoreIndex, download_loader
@@ -212,7 +211,6 @@ if st.session_state.messages[-1]["role"] != "assistant":
                     nome_arquivo = os.path.basename(caminho_arquivo)
                     file_bytes = download_from_s3(nome_arquivo)
                     doc_preview = preview_pdf(file_bytes)
-                    st.write(pdf_viewer(file_bytes))
                     response_message = (response.response + f'\n\n Aqui está o documento relacionado a sua pergunta: ')
                     st.write(response_message,unsafe_allow_html=True)
                     st.write(doc_preview, unsafe_allow_html=True)
