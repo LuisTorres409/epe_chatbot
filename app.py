@@ -96,7 +96,13 @@ def download_from_s3(file_name):
 def preview_pdf(file_bytes):
     encoded_pdf = base64.b64encode(file_bytes).decode('utf-8')
     #return f'<embed src="data:application/pdf;base64,{encoded_pdf}" width="100%" height="500" type="application/pdf">'
-    return F'<iframe src="data:application/pdf;base64,{encoded_pdf}" width="100%" height="500" type="application/pdf"></iframe>'
+    pdf_display =  f"""<embed
+    class="pdfobject"
+    type="application/pdf"
+    title="Embedded PDF"
+    src="data:application/pdf;base64,{encoded_pdf}"
+    style="overflow: auto; width: 100%; height: 100%;">"""
+    return pdf_display
 
 def process_documents(pdf_docs):
     pdfs = []
