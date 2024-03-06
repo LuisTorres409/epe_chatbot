@@ -4,6 +4,7 @@ import textwrap
 import base64
 from io import BytesIO
 import torch
+from streamlit_pdf_viewer import pdf_viewer
 
 import streamlit as st
 import boto3
@@ -209,7 +210,8 @@ if st.session_state.messages[-1]["role"] != "assistant":
                     doc_preview = preview_pdf(file_bytes)
                     response_message = (response.response + f'\n\n Aqui está o documento relacionado a sua pergunta: ')
                     st.write(response_message,unsafe_allow_html=True)
-                    st.write(doc_preview, unsafe_allow_html=True)
+                    #st.write(doc_preview, unsafe_allow_html=True)
+                    pdf_viewer(file_bytes)
                     st.session_state.messages.append({"role": "assistant", "content": response_message, "file": doc_preview , "has_file": True})
                 except:
                     response_message = response.response

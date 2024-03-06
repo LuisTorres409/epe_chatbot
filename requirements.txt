@@ -5,6 +5,7 @@ pinecone-client
 PyPDF2
 SQLAlchemy
 streamlit
+streamlit-pdf-viewer
 torch
 sentence-transformers
 llama-index
