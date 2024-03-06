@@ -1,7 +1,7 @@
 boto3
 langchain
 langchain_community
-pinecone
+pinecone-client
 PyPDF2
 python-dotenv
 SQLAlchemy
@@ -17,7 +17,6 @@ llama-index-indices-managed-llama-cloud
 llama-index-legacy
 llama-index-llms-huggingface
 llama-index-llms-openai
-llama-index-multi-modal-llms-openai
 llama-index-program-openai
 llama-index-question-gen-openai
 llama-index-readers-file
