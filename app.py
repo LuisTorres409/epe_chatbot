@@ -194,6 +194,7 @@ for message in st.session_state.messages: # Display the prior chat messages
             with st.expander('Documento'):
                 #st.write(message["file"], unsafe_allow_html=True)
                 doc_link = f'https://epe-pdfs.s3.sa-east-1.amazonaws.com/{message["file"].replace(" ","+")}'
+                st.markdown(f'**{message["file"]}**')
                 st.link_button('Download',doc_link)
 # If last message is not from assistant, generate a new response
 if st.session_state.messages[-1]["role"] != "assistant":
@@ -214,11 +215,8 @@ if st.session_state.messages[-1]["role"] != "assistant":
                     st.write(response_message,unsafe_allow_html=True)
                     #st.write(doc_preview, unsafe_allow_html=True)
                     doc_link = f'https://epe-pdfs.s3.sa-east-1.amazonaws.com/{nome_arquivo.replace(" ","+")}'
-                    col1 , col2 = st.columns([1,1])
-                    with col1:
-                        st.link_button('Download',doc_link)
-                    with col2:
-                        st.markdown(f'**{nome_arquivo}**')
+                    st.markdown(f'**{nome_arquivo}**')
+                    st.link_button('Download',doc_link)
                     #pdf_viewer(input = file_bytes,pages_to_render=1)
                     st.session_state.messages.append({"role": "assistant", "content": response_message, "file": nome_arquivo , "has_file": True})
                 except Exception as e:
