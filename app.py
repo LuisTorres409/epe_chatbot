@@ -72,7 +72,7 @@ def init_connections_and_databases():
     
     retriever = VectorIndexRetriever(index=index,similarity_top_k=5,verbose=True)
 
-    response_synthesizer = get_response_synthesizer(streaming  = True)
+    response_synthesizer = get_response_synthesizer()
 
     query_engine = RetrieverQueryEngine(retriever=retriever,node_postprocessors=[SimilarityPostprocessor(similarity_cutoff=0.5)],response_synthesizer=response_synthesizer)
 
