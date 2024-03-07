@@ -192,7 +192,7 @@ for message in st.session_state.messages: # Display the prior chat messages
         if message["has_file"]:
             with st.expander('Documento'):
                 #st.write(message["file"], unsafe_allow_html=True)
-                doc_link = f'https://epe-pdfs.s3.sa-east-1.amazonaws.com/{message['file'].replace(' ','+')}'
+                doc_link = f'https://epe-pdfs.s3.sa-east-1.amazonaws.com/{message["file"].replace(' ','+')}'
                 st.link_button('Download',doc_link)
 # If last message is not from assistant, generate a new response
 if st.session_state.messages[-1]["role"] != "assistant":
