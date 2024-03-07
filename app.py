@@ -64,9 +64,8 @@ def init_connections_and_databases():
 
     memory = ChatMemoryBuffer.from_defaults(token_limit=3900)
 
-
     chat_engine = index.as_chat_engine(chat_mode="condense_question",
-                                       memory=memory,
+                                       memory=st.session_state.chat_memory,
                                        llm=llm,
                                        context_prompt=("You are an assistant to the company EPE, it's a brazilian public company that works with energy. You are responsible for the company's chatbot and you will be talking to company members and assisting with knowlodge of EPE database.Answer all questios in portuguese"),
                                        verbose=True)
@@ -140,6 +139,9 @@ def process_documents(pdf_docs):
 st.set_page_config(page_title="EPE Chatbot", layout="centered", initial_sidebar_state="expanded", menu_items=None)
 st.title('EPE Chatbot')
 
+if "chat_memory" not in st.session_state.keys():
+    st.session_state.chat_memory = ChatMemoryBuffer.from_defaults(token_limit=3900)
+
 index , s3 , bucket_name , chat_engine , query_engine= init_connections_and_databases()
 st.sidebar.image('assets/epe_logo.png',width=120)
 with st.sidebar:
@@ -185,6 +187,9 @@ if "query_engine" not in st.session_state.keys(): # Initialize the query engine
 
 if "chat_engine" not in st.session_state.keys(): # Initialize the chat engine
     st.session_state.chat_engine = chat_engine
+
+if "chat_memory" not in st.session_state.keys():
+    st.session_state.chat_memory = ChatMemoryBuffer.from_defaults(token_limit=3900)
 
 if prompt := st.chat_input("Faça uma pergunta"): # Prompt for user input and save to chat history
     st.session_state.messages.append({"role": "user", "content": prompt , 'has_file': False})
