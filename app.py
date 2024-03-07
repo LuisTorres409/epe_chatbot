@@ -221,11 +221,12 @@ if st.session_state.messages[-1]["role"] != "assistant":
         if retornar_documento:
             try:
                 caminho_arquivo = response.source_nodes[0].metadata['file_name']
+                page_number = response.source_nodes[0].metadata['page']
                 nome_arquivo = os.path.basename(caminho_arquivo)
                 file_bytes = download_from_s3(nome_arquivo)
                 doc_preview = preview_pdf(file_bytes)
                 doc_image = fitz.open(stream=file_bytes, filetype='pdf')
-                page_image = doc_image.load_page(0)
+                page_image = doc_image.load_page(page_number-1)
                 pix = page_image.get_pixmap(dpi=300)  # Scale up the image resolution
                 img = Image.frombytes("RGB", [pix.width, pix.height], pix.samples)
                 st.write(response)
