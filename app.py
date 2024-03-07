@@ -34,6 +34,7 @@ from templates.file_uploader_label import hide_label
 
 
 
+
 ## Fazendo o embeddings dos livros
 @st.cache_resource(show_spinner=False)
 def init_connections_and_databases():
@@ -91,16 +92,6 @@ def download_from_s3(file_name):
     response = s3.get_object(Bucket=bucket_name, Key=file_name)
     content = response["Body"].read()
     return content
-
-def get_page_images(file_bytes):
-    doc = fitz.open(stream=file_bytes, filetype='pdf')
-    page_images = []
-    for page_number in range(len(doc)):
-        page = doc.load_page(page_number)
-        pix = page.get_pixmap(dpi=300)
-        img = Image.frombytes("RGB", [pix.width, pix.height], pix.samples)
-        page_images.append(img)
-    return page_images
 
 def preview_pdf(file_bytes):
     encoded_pdf = base64.b64encode(file_bytes).decode('utf-8')
@@ -233,7 +224,11 @@ if st.session_state.messages[-1]["role"] != "assistant":
                 nome_arquivo = os.path.basename(caminho_arquivo)
                 file_bytes = download_from_s3(nome_arquivo)
                 doc_preview = preview_pdf(file_bytes)
-                imgs = get_page_images(file_bytes)
+                doc_image = fitz.open(stream=file_bytes, filetype='pdf')
+                page_image = doc_image.load_page(0)
+                pix = page_image.get_pixmap(dpi=300)  # Scale up the image resolution
+                img = Image.frombytes("RGB", [pix.width, pix.height], pix.samples)
+                st.write(response)
                 response_message = (response.response + f'\n\n Aqui está o documento relacionado a sua pergunta: ')
 
                 for chunk in response_message.split():
@@ -246,8 +241,7 @@ if st.session_state.messages[-1]["role"] != "assistant":
                 st.markdown(f'**{nome_arquivo}**')
                 st.link_button('Download',doc_link)
                 with st.expander('Pré vizualizar documento'):
-                    for img in imgs:
-                        st.image(img,use_column_width=True)
+                    st.image(img,use_column_width=True)
                 st.session_state.messages.append({"role": "assistant", "content": response_message, "file": nome_arquivo , "has_file": True , "img": img})
             
             except Exception as e:
