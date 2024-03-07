@@ -4,6 +4,7 @@ import textwrap
 import base64
 from io import BytesIO
 import torch
+import fitz
 import streamlit as st
 import boto3
 import time
@@ -21,6 +22,7 @@ from llama_index.vector_stores.pinecone import PineconeVectorStore
 from llama_index.core import VectorStoreIndex, get_response_synthesizer
 from llama_index.core.retrievers import VectorIndexRetriever
 from pinecone import Pinecone, ServerlessSpec
+from PIL import Image
 from llama_index.core.query_engine import RetrieverQueryEngine
 from llama_index.core.postprocessor import SimilarityPostprocessor
 
@@ -220,6 +222,10 @@ if st.session_state.messages[-1]["role"] != "assistant":
                 nome_arquivo = os.path.basename(caminho_arquivo)
                 file_bytes = download_from_s3(nome_arquivo)
                 doc_preview = preview_pdf(file_bytes)
+                doc_image = fitz.open(stream=file_bytes, filetype='pdf')
+                page_image = doc_image.load_page(1)
+                pix = page_image.get_pixmap(dpi=300)  # Scale up the image resolution
+                img = Image.frombytes("RGB", [pix.width, pix.height], pix.samples)
                 response_message = (response.response + f'\n\n Aqui está o documento relacionado a sua pergunta: ')
 
                 for chunk in response_message.split():
@@ -231,6 +237,7 @@ if st.session_state.messages[-1]["role"] != "assistant":
                 doc_link = f'https://epe-pdfs.s3.sa-east-1.amazonaws.com/{nome_arquivo.replace(" ","+")}'
                 st.markdown(f'**{nome_arquivo}**')
                 st.link_button('Download',doc_link)
+                st.image(img,use_column_width=True)
                 st.session_state.messages.append({"role": "assistant", "content": response_message, "file": nome_arquivo , "has_file": True})
             
             except Exception as e:

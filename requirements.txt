@@ -6,6 +6,8 @@ PyPDF2
 SQLAlchemy
 streamlit
 torch
+PyMuPDF
+Pillow
 sentence-transformers
 llama-index
 llama-index-agent-openai
