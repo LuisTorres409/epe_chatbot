@@ -229,7 +229,6 @@ if st.session_state.messages[-1]["role"] != "assistant":
                 page_image = doc_image.load_page(page_number-1)
                 pix = page_image.get_pixmap(dpi=300)  # Scale up the image resolution
                 img = Image.frombytes("RGB", [pix.width, pix.height], pix.samples)
-                st.write(response)
                 response_message = (response.response + f'\n\n Aqui está o documento relacionado a sua pergunta: ')
 
                 for chunk in response_message.split():
