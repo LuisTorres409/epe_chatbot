@@ -202,6 +202,8 @@ for message in st.session_state.messages: # Display the prior chat messages
                 doc_link = f'https://epe-pdfs.s3.sa-east-1.amazonaws.com/{message["file"].replace(" ","+")}'
                 st.markdown(f'**{message["file"]}**')
                 st.link_button('Download',doc_link)
+                with st.expander('Pré vizualizar documento'):
+                    st.image(message["img"],use_column_width=True)
 # If last message is not from assistant, generate a new response
 if st.session_state.messages[-1]["role"] != "assistant":
     with st.chat_message("assistant"):
@@ -223,7 +225,7 @@ if st.session_state.messages[-1]["role"] != "assistant":
                 file_bytes = download_from_s3(nome_arquivo)
                 doc_preview = preview_pdf(file_bytes)
                 doc_image = fitz.open(stream=file_bytes, filetype='pdf')
-                page_image = doc_image.load_page(1)
+                page_image = doc_image.load_page(0)
                 pix = page_image.get_pixmap(dpi=300)  # Scale up the image resolution
                 img = Image.frombytes("RGB", [pix.width, pix.height], pix.samples)
                 response_message = (response.response + f'\n\n Aqui está o documento relacionado a sua pergunta: ')
@@ -237,8 +239,9 @@ if st.session_state.messages[-1]["role"] != "assistant":
                 doc_link = f'https://epe-pdfs.s3.sa-east-1.amazonaws.com/{nome_arquivo.replace(" ","+")}'
                 st.markdown(f'**{nome_arquivo}**')
                 st.link_button('Download',doc_link)
-                st.image(img,use_column_width=True)
-                st.session_state.messages.append({"role": "assistant", "content": response_message, "file": nome_arquivo , "has_file": True})
+                with st.expander('Pré vizualizar documento'):
+                    st.image(img,use_column_width=True)
+                st.session_state.messages.append({"role": "assistant", "content": response_message, "file": nome_arquivo , "has_file": True , "img": img})
             
             except Exception as e:
                 response_message = response.response
