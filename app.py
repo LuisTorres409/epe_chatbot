@@ -221,7 +221,10 @@ if st.session_state.messages[-1]["role"] != "assistant":
         if retornar_documento:
             try:
                 caminho_arquivo = response.source_nodes[0].metadata['file_name']
-                page_number = response.source_nodes[0].metadata['page']
+                try:
+                    page_number = response.source_nodes[0].metadata['page']
+                except:
+                    page_number = 0
                 nome_arquivo = os.path.basename(caminho_arquivo)
                 file_bytes = download_from_s3(nome_arquivo)
                 doc_preview = preview_pdf(file_bytes)
