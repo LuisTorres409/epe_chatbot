@@ -211,7 +211,7 @@ if st.session_state.messages[-1]["role"] != "assistant":
                     response_message = (response.response + f'\n\n Aqui está o documento relacionado a sua pergunta: ')
                     st.write(response_message,unsafe_allow_html=True)
                     #st.write(doc_preview, unsafe_allow_html=True)
-                    pdf_viewer(input = file_bytes,width=200,pages_to_render=1,height = 300)
+                    pdf_viewer(input = file_bytes,pages_to_render=1)
                     st.session_state.messages.append({"role": "assistant", "content": response_message, "file": doc_preview , "has_file": True})
                 except:
                     response_message = response.response
