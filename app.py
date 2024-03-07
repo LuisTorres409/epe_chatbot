@@ -225,10 +225,10 @@ if st.session_state.messages[-1]["role"] != "assistant":
                     st.img(images[0],caption='oi')
                     #pdf_viewer(input = file_bytes,pages_to_render=1)
                     st.session_state.messages.append({"role": "assistant", "content": response_message, "file": nome_arquivo , "has_file": True})
-                except:
+                except Exception as e:
                     response_message = response.response
                     st.write(response_message)
-                    st.error("Não foi possível encontrar o documento relacionado a sua pergunta")
+                    st.error(f"Ocorreu um erro {e}")
                     st.session_state.messages.append({"role": "assistant", "content": response_message, "has_file": False})
             else:
                 response_message = response.response
