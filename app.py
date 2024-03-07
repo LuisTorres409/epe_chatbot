@@ -209,7 +209,9 @@ if st.session_state.messages[-1]["role"] != "assistant":
                     caminho_arquivo = response.source_nodes[0].metadata['file_name']
                     nome_arquivo = os.path.basename(caminho_arquivo)
                     file_bytes = download_from_s3(nome_arquivo)
-                    images = convert_from_bytes(file_bytes,single_file=True)
+                    pdf = PdfReader(file_bytes)
+                    page_1 = pdf.pages[0]
+                    st.write(page_1)
                     doc_preview = preview_pdf(file_bytes)
                     response_message = (response.response + f'\n\n Aqui está o documento relacionado a sua pergunta: ')
                     st.write(response_message,unsafe_allow_html=True)
@@ -222,7 +224,7 @@ if st.session_state.messages[-1]["role"] != "assistant":
                     with col2:
                         
                         st.markdown(f'**{nome_arquivo}**')
-                    st.img(images[0],caption='oi')
+                    #st.img(images[0],caption='oi')
                     #pdf_viewer(input = file_bytes,pages_to_render=1)
                     st.session_state.messages.append({"role": "assistant", "content": response_message, "file": nome_arquivo , "has_file": True})
                 except Exception as e:
