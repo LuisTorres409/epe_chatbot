@@ -4,6 +4,7 @@ langchain_community
 pinecone-client
 PyPDF2
 SQLAlchemy
+time
 streamlit
 streamlit-pdf-viewer==0.0.7
 torch

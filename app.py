@@ -9,6 +9,7 @@ from pdf2image import convert_from_bytes
 
 import streamlit as st
 import boto3
+import time
 
 from PyPDF2 import PdfReader
 from llama_index.core import Document, Settings, SimpleDirectoryReader, StorageContext, ServiceContext, VectorStoreIndex, download_loader
@@ -72,13 +73,14 @@ def init_connections_and_databases():
     
     retriever = VectorIndexRetriever(index=index,similarity_top_k=5,verbose=True)
 
-    response_synthesizer = get_response_synthesizer()
+    response_synthesizer = get_response_synthesizer(streaming  = True)
 
     query_engine = RetrieverQueryEngine(retriever=retriever,node_postprocessors=[SimilarityPostprocessor(similarity_cutoff=0.5)],response_synthesizer=response_synthesizer)
 
     #query_engine = index.as_query_engine()
 
     return index , s3 , bucket_name , chat_engine , query_engine
+
 
 def check_file_exists_in_s3(bucket_name, s3_object_key):
     try:
@@ -199,6 +201,11 @@ for message in st.session_state.messages: # Display the prior chat messages
 # If last message is not from assistant, generate a new response
 if st.session_state.messages[-1]["role"] != "assistant":
     with st.chat_message("assistant"):
+        
+        message_placeholder = st.empty()
+        message_placeholder.text("Estou processando a sua pergunta...")
+        full_response = ''
+
         with st.spinner("Processando..."):
             #response = st.session_state.query_engine.query(prompt)
             if engine_option == "Chat Engine":
@@ -212,16 +219,25 @@ if st.session_state.messages[-1]["role"] != "assistant":
                     file_bytes = download_from_s3(nome_arquivo)
                     doc_preview = preview_pdf(file_bytes)
                     response_message = (response.response + f'\n\n Aqui está o documento relacionado a sua pergunta: ')
-                    st.write(response_message,unsafe_allow_html=True)
-                    #st.write(doc_preview, unsafe_allow_html=True)
+
+                    for chunk in response_message.split():
+                        
+                        full_response += chunk + " "
+                        time.sleep(0.025)
+                        message_placeholder.markdown(full_response + " ")
+
                     doc_link = f'https://epe-pdfs.s3.sa-east-1.amazonaws.com/{nome_arquivo.replace(" ","+")}'
                     st.markdown(f'**{nome_arquivo}**')
                     st.link_button('Download',doc_link)
-                    #pdf_viewer(input = file_bytes,pages_to_render=1)
                     st.session_state.messages.append({"role": "assistant", "content": response_message, "file": nome_arquivo , "has_file": True})
+                
                 except Exception as e:
                     response_message = response.response
-                    st.write(response_message)
+                    for chunk in response_message.split():
+                        
+                        full_response += chunk + " "
+                        time.sleep(0.025)
+                        message_placeholder.markdown(full_response + " ")
                     st.error(f"Ocorreu um erro {e}")
                     st.session_state.messages.append({"role": "assistant", "content": response_message, "has_file": False})
             else:
