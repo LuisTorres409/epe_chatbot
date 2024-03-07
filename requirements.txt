@@ -4,7 +4,6 @@ langchain_community
 pinecone-client
 PyPDF2
 SQLAlchemy
-time
 streamlit
 torch
 sentence-transformers
