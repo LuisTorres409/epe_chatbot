@@ -62,7 +62,7 @@ def init_connections_and_databases():
     Settings.llm = llm
     index  = VectorStoreIndex.from_vector_store(vectorstore)
 
-    memory = ChatMemoryBuffer.from_defaults(token_limit=3900)
+    #memory = ChatMemoryBuffer.from_defaults(token_limit=3900)
 
     chat_engine = index.as_chat_engine(chat_mode="condense_question",
                                        memory=st.session_state.chat_memory,
