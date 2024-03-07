@@ -202,8 +202,7 @@ for message in st.session_state.messages: # Display the prior chat messages
                 doc_link = f'https://epe-pdfs.s3.sa-east-1.amazonaws.com/{message["file"].replace(" ","+")}'
                 st.markdown(f'**{message["file"]}**')
                 st.link_button('Download',doc_link)
-                with st.expander('Pré vizualizar documento'):
-                    st.image(message["img"],use_column_width=True)
+                #st.image(message["img"],use_column_width=True)
 # If last message is not from assistant, generate a new response
 if st.session_state.messages[-1]["role"] != "assistant":
     with st.chat_message("assistant"):
