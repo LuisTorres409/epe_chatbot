@@ -206,47 +206,47 @@ if st.session_state.messages[-1]["role"] != "assistant":
         message_placeholder.text("Estou processando a sua pergunta...")
         full_response = ''
 
-        with st.spinner("Processando..."):
-            #response = st.session_state.query_engine.query(prompt)
-            if engine_option == "Chat Engine":
-                response = st.session_state.chat_engine.chat(prompt)
-            elif engine_option == "Query Engine":
-                response = st.session_state.query_engine.query(prompt)
-            if retornar_documento:
-                try:
-                    caminho_arquivo = response.source_nodes[0].metadata['file_name']
-                    nome_arquivo = os.path.basename(caminho_arquivo)
-                    file_bytes = download_from_s3(nome_arquivo)
-                    doc_preview = preview_pdf(file_bytes)
-                    response_message = (response.response + f'\n\n Aqui está o documento relacionado a sua pergunta: ')
 
-                    for chunk in response_message.split():
-                        
-                        full_response += chunk + " "
-                        time.sleep(0.025)
-                        message_placeholder.markdown(full_response + " ")
+        #response = st.session_state.query_engine.query(prompt)
+        if engine_option == "Chat Engine":
+            response = st.session_state.chat_engine.chat(prompt)
+        elif engine_option == "Query Engine":
+            response = st.session_state.query_engine.query(prompt)
+        if retornar_documento:
+            try:
+                caminho_arquivo = response.source_nodes[0].metadata['file_name']
+                nome_arquivo = os.path.basename(caminho_arquivo)
+                file_bytes = download_from_s3(nome_arquivo)
+                doc_preview = preview_pdf(file_bytes)
+                response_message = (response.response + f'\n\n Aqui está o documento relacionado a sua pergunta: ')
 
-                    doc_link = f'https://epe-pdfs.s3.sa-east-1.amazonaws.com/{nome_arquivo.replace(" ","+")}'
-                    st.markdown(f'**{nome_arquivo}**')
-                    st.link_button('Download',doc_link)
-                    st.session_state.messages.append({"role": "assistant", "content": response_message, "file": nome_arquivo , "has_file": True})
-                
-                except Exception as e:
-                    response_message = response.response
-                    for chunk in response_message.split():
-                        
-                        full_response += chunk + " "
-                        time.sleep(0.025)
-                        message_placeholder.markdown(full_response + " ")
-                    st.error(f"Ocorreu um erro {e}")
-                    st.session_state.messages.append({"role": "assistant", "content": response_message, "has_file": False})
-            else:
-                response_message = response.response
                 for chunk in response_message.split():
                     
                     full_response += chunk + " "
                     time.sleep(0.025)
                     message_placeholder.markdown(full_response + " ")
 
+                doc_link = f'https://epe-pdfs.s3.sa-east-1.amazonaws.com/{nome_arquivo.replace(" ","+")}'
+                st.markdown(f'**{nome_arquivo}**')
+                st.link_button('Download',doc_link)
+                st.session_state.messages.append({"role": "assistant", "content": response_message, "file": nome_arquivo , "has_file": True})
+            
+            except Exception as e:
+                response_message = response.response
+                for chunk in response_message.split():
+                    
+                    full_response += chunk + " "
+                    time.sleep(0.025)
+                    message_placeholder.markdown(full_response + " ")
+                st.error(f"Ocorreu um erro {e}")
                 st.session_state.messages.append({"role": "assistant", "content": response_message, "has_file": False})
+        else:
+            response_message = response.response
+            for chunk in response_message.split():
+                
+                full_response += chunk + " "
+                time.sleep(0.025)
+                message_placeholder.markdown(full_response + " ")
+
+            st.session_state.messages.append({"role": "assistant", "content": response_message, "has_file": False})
 
