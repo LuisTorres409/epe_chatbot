@@ -213,7 +213,7 @@ if st.session_state.messages[-1]["role"] != "assistant":
                     st.write(response_message,unsafe_allow_html=True)
                     #st.write(doc_preview, unsafe_allow_html=True)
                     doc_link = f'https://epe-pdfs.s3.sa-east-1.amazonaws.com/{nome_arquivo.replace(" ","+")}'
-                    col1 , col2 = st.columns([1,1)
+                    col1 , col2 = st.columns([1,1])
                     with col1:
                         
                         st.link_button('Download',doc_link)
