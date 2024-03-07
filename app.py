@@ -212,7 +212,7 @@ if st.session_state.messages[-1]["role"] != "assistant":
                     response_message = (response.response + f'\n\n Aqui está o documento relacionado a sua pergunta: ')
                     st.write(response_message,unsafe_allow_html=True)
                     #st.write(doc_preview, unsafe_allow_html=True)
-                    doc_link = f'https://epe-pdfs.s3.sa-east-1.amazonaws.com/{nome_arquivo.replace(' ','+')}'
+                    doc_link = f'https://epe-pdfs.s3.sa-east-1.amazonaws.com/{nome_arquivo.replace(" ","+")}'
                     st.link_button('Download',doc_link)
                     #pdf_viewer(input = file_bytes,pages_to_render=1)
                     st.session_state.messages.append({"role": "assistant", "content": response_message, "file": nome_arquivo , "has_file": True})
