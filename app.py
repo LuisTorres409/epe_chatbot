@@ -242,6 +242,11 @@ if st.session_state.messages[-1]["role"] != "assistant":
                     st.session_state.messages.append({"role": "assistant", "content": response_message, "has_file": False})
             else:
                 response_message = response.response
-                st.write(response_message)
+                for chunk in response_message.split():
+                    
+                    full_response += chunk + " "
+                    time.sleep(0.025)
+                    message_placeholder.markdown(full_response + " ")
+
                 st.session_state.messages.append({"role": "assistant", "content": response_message, "has_file": False})
 
