@@ -222,7 +222,7 @@ if st.session_state.messages[-1]["role"] != "assistant":
                     with col2:
                         
                         st.markdown(f'**{nome_arquivo}**')
-                    st.img(images[0],caption='oi)
+                    st.img(images[0],caption='oi')
                     #pdf_viewer(input = file_bytes,pages_to_render=1)
                     st.session_state.messages.append({"role": "assistant", "content": response_message, "file": nome_arquivo , "has_file": True})
                 except:
