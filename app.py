@@ -92,6 +92,16 @@ def download_from_s3(file_name):
     content = response["Body"].read()
     return content
 
+def get_page_images(file_bytes):
+    doc = fitz.open(stream=file_bytes, filetype='pdf')
+    page_images = []
+    for page_number in range(len(doc)):
+        page = doc.load_page(page_number)
+        pix = page.get_pixmap(dpi=300)
+        img = Image.frombytes("RGB", [pix.width, pix.height], pix.samples)
+        page_images.append(img)
+    return page_images
+
 def preview_pdf(file_bytes):
     encoded_pdf = base64.b64encode(file_bytes).decode('utf-8')
     #return f'<embed src="data:application/pdf;base64,{encoded_pdf}" width="100%" height="500" type="application/pdf">'
@@ -223,10 +233,7 @@ if st.session_state.messages[-1]["role"] != "assistant":
                 nome_arquivo = os.path.basename(caminho_arquivo)
                 file_bytes = download_from_s3(nome_arquivo)
                 doc_preview = preview_pdf(file_bytes)
-                doc_image = fitz.open(stream=file_bytes, filetype='pdf')
-                page_image = doc_image.load_page(0)
-                pix = page_image.get_pixmap(dpi=300)  # Scale up the image resolution
-                img = Image.frombytes("RGB", [pix.width, pix.height], pix.samples)
+                imgs = get_page_images(file_bytes)
                 response_message = (response.response + f'\n\n Aqui está o documento relacionado a sua pergunta: ')
 
                 for chunk in response_message.split():
@@ -239,7 +246,8 @@ if st.session_state.messages[-1]["role"] != "assistant":
                 st.markdown(f'**{nome_arquivo}**')
                 st.link_button('Download',doc_link)
                 with st.expander('Pré vizualizar documento'):
-                    st.image(img,use_column_width=True)
+                    for img in imgs:
+                        st.image(img,use_column_width=True)
                 st.session_state.messages.append({"role": "assistant", "content": response_message, "file": nome_arquivo , "has_file": True , "img": img})
             
             except Exception as e:
