@@ -4,9 +4,6 @@ import textwrap
 import base64
 from io import BytesIO
 import torch
-from streamlit_pdf_viewer import pdf_viewer
-from pdf2image import convert_from_bytes
-
 import streamlit as st
 import boto3
 import time
