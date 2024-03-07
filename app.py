@@ -191,8 +191,9 @@ for message in st.session_state.messages: # Display the prior chat messages
         st.write(message["content"],unsafe_allow_html=True)
         if message["has_file"]:
             with st.expander('Documento'):
-                st.write(message["file"], unsafe_allow_html=True)
-        
+                #st.write(message["file"], unsafe_allow_html=True)
+                doc_link = f'https://epe-pdfs.s3.sa-east-1.amazonaws.com/{message['file'].replace(' ','+')}'
+                st.link_button('Download',doc_link)
 # If last message is not from assistant, generate a new response
 if st.session_state.messages[-1]["role"] != "assistant":
     with st.chat_message("assistant"):
@@ -210,9 +211,11 @@ if st.session_state.messages[-1]["role"] != "assistant":
                     doc_preview = preview_pdf(file_bytes)
                     response_message = (response.response + f'\n\n Aqui está o documento relacionado a sua pergunta: ')
                     st.write(response_message,unsafe_allow_html=True)
-                    st.write(doc_preview, unsafe_allow_html=True)
+                    #st.write(doc_preview, unsafe_allow_html=True)
+                    doc_link = f'https://epe-pdfs.s3.sa-east-1.amazonaws.com/{nome_arquivo.replace(' ','+')}'
+                    st.link_button('Download',doc_link)
                     #pdf_viewer(input = file_bytes,pages_to_render=1)
-                    st.session_state.messages.append({"role": "assistant", "content": response_message, "file": doc_preview , "has_file": True})
+                    st.session_state.messages.append({"role": "assistant", "content": response_message, "file": nome_arquivo , "has_file": True})
                 except:
                     response_message = response.response
                     st.write(response_message)
