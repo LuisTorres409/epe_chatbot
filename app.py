@@ -105,6 +105,7 @@ def preview_pdf(file_bytes):
     return pdf_display
 
 def process_documents(pdf_docs):
+
     pdfs = []
     for pdf in pdf_docs:
         pdf_bytes = pdf.read()
@@ -116,6 +117,8 @@ def process_documents(pdf_docs):
                 text = page.extract_text()
                 Settings.chunk_size = 2048
                 Settings.chunk_overlap = 400
+                if len(text) > 2000:
+                    text = text[:2000]
                 chunk_document = Document(
                     id=str(uuid.uuid4()),
                     text=text,
