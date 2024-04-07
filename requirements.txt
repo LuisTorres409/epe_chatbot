@@ -28,3 +28,4 @@ llama-index-vector-stores-pinecone
 llama-index-vector-stores-postgres
 llama-parse
 llamaindex-py-client
+asyncio

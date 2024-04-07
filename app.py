@@ -8,9 +8,15 @@ import fitz
 import streamlit as st
 import boto3
 import time
+import asyncio
+# Create a new event loop
+loop = asyncio.new_event_loop()
+
+# Set the event loop as the current event loop
+asyncio.set_event_loop(loop)
 
 from PyPDF2 import PdfReader
-#from llama_index.core import Document, Settings, VectorStoreIndex
+from llama_index.core import Document, Settings, VectorStoreIndex
 from llama_index.embeddings.langchain import LangchainEmbedding
 from llama_index.llms.openai import OpenAI
 from llama_index.core.memory import ChatMemoryBuffer
