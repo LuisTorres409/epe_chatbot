@@ -10,26 +10,18 @@ import boto3
 import time
 
 from PyPDF2 import PdfReader
-from llama_index.core import Document, Settings, SimpleDirectoryReader, StorageContext, ServiceContext, VectorStoreIndex, download_loader
+from llama_index.core import Document, Settings, VectorStoreIndex
 from llama_index.embeddings.langchain import LangchainEmbedding
 from llama_index.llms.openai import OpenAI
-from langchain.text_splitter import CharacterTextSplitter,RecursiveCharacterTextSplitter
-from llama_index.llms.huggingface import HuggingFaceLLM
-from llama_index.vector_stores.postgres import PGVectorStore
-from llama_index.core import PromptTemplate
 from llama_index.core.memory import ChatMemoryBuffer
 from llama_index.vector_stores.pinecone import PineconeVectorStore
 from llama_index.core import VectorStoreIndex, get_response_synthesizer
 from llama_index.core.retrievers import VectorIndexRetriever
-from pinecone import Pinecone, ServerlessSpec
+from pinecone import Pinecone
 from PIL import Image
 from llama_index.core.query_engine import RetrieverQueryEngine
 from llama_index.core.postprocessor import SimilarityPostprocessor
-
 from langchain.embeddings.huggingface import HuggingFaceEmbeddings
-from langchain.embeddings.openai import OpenAIEmbeddings
-from langchain_community.document_loaders import PyPDFLoader, UnstructuredAPIFileIOLoader, PyMuPDFLoader
-from langchain.chat_models import ChatOpenAI
 from templates.file_uploader_label import hide_label
 
 
