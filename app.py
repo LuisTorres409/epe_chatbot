@@ -10,7 +10,7 @@ import boto3
 import time
 
 from PyPDF2 import PdfReader
-from llama_index.core import Document, Settings, VectorStoreIndex
+#from llama_index.core import Document, Settings, VectorStoreIndex
 from llama_index.embeddings.langchain import LangchainEmbedding
 from llama_index.llms.openai import OpenAI
 from llama_index.core.memory import ChatMemoryBuffer
@@ -23,6 +23,7 @@ from llama_index.core.query_engine import RetrieverQueryEngine
 from llama_index.core.postprocessor import SimilarityPostprocessor
 from langchain.embeddings.huggingface import HuggingFaceEmbeddings
 from templates.file_uploader_label import hide_label
+
 
 
 
